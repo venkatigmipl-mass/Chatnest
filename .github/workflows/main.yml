@@ -29,11 +29,15 @@ jobs:
       - name: Add Capacitor
         run: |
           rm -rf android capacitor.config.ts capacitor.config.js capacitor.config.json
-          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 @capacitor/filesystem@6 @capacitor/share@6 @capacitor/app@6 --legacy-peer-deps --no-audit --no-fund
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 @capacitor/app@6 --legacy-peer-deps --no-audit --no-fund
           echo '{"appId":"com.chatnest.demo","appName":"ChatNest","webDir":"dist"}' > capacitor.config.json
+          npx cap add android
+          ls android
+
       - name: Add camera permission
         run: |
-          sed -i 's#<application#<uses-permission android:name="android.permission.CAMERA" /><application#' android/app/src/main/AndroidManifest.xml
+          F=android/app/src/main/AndroidManifest.xml
+          if [ -f "$F" ]; then sed -i 's#<application#<uses-permission android:name="android.permission.CAMERA" /><application#' "$F"; fi
 
       - name: Sync and build APK
         run: |
